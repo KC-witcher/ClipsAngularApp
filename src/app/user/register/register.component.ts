@@ -1,15 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
+  name = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  email = new FormControl('', [Validators.email, Validators.required]);
+  age = new FormControl('', [
+    Validators.required,
+    Validators.min(18),
+    Validators.max(120),
+  ]);
+  password = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm),
+  ]);
+  confirm_password = new FormControl('', [Validators.required]);
+  phone = new FormControl('');
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  registerForm = new FormGroup({
+    name: this.name,
+    email: this.email,
+    age: this.age,
+    password: this.password,
+    confirm_password: this.confirm_password,
+    phone: this.phone,
+  });
 }
