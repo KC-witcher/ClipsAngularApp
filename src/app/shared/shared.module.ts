@@ -5,6 +5,8 @@ import { ModalComponent } from './modal/modal.component';
 import { TabsContainerComponent } from './tabs-container/tabs-container.component';
 import { TabComponent } from './tab/tab.component';
 import { InputComponent } from './input/input.component';
+import { NgxMaskModule } from 'ngx-mask';
+import { AlertComponent } from './alert/alert.component';
 // import { ModalService } from '../services/modal.service';
 
 @NgModule({
@@ -13,13 +15,15 @@ import { InputComponent } from './input/input.component';
     TabsContainerComponent,
     TabComponent,
     InputComponent,
+    AlertComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskModule.forRoot()],
   exports: [
     ModalComponent,
     TabsContainerComponent,
     TabComponent,
     InputComponent,
+    AlertComponent,
   ],
 
   // Should do this if Modal Service Injectable decorator doesn't have "providedIn: root"
