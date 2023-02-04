@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
@@ -9,13 +9,17 @@ import { ModalService } from 'src/app/services/modal.service';
   // If you aren't creating providers in shared module, then this option is also valid
   // providers: [ModalService],
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements OnInit, OnDestroy {
   @Input() modalID = '';
 
   constructor(public modal: ModalService, public el: ElementRef) {}
 
   ngOnInit(): void {
     document.body.appendChild(this.el.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    document.body.removeChild(this.el.nativeElement);
   }
 
   closeModal() {
