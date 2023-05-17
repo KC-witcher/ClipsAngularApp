@@ -23,19 +23,45 @@ export class FfmpegService {
   async getScreenshots(file: File) {
     const data = await fetchFile(file);
     this.ffmpeg.FS('writeFile', file.name, data);
-    await this.ffmpeg.run(
-      // Input
-      '-i',
-      file.name, //grab the file name from the file system
-      // Output options
-      '-ss',
-      '00:00:01', //change the current timestamp
-      '-frames:v',
-      '1', //grab one frame
-      '-filter:v',
-      'scale=510:-1', //rescale the screenshot. need filter flag
-      // Output
-      'output_01.png' //output file
-    );
+
+    const seconds = [1, 2, 3];
+    const commands: string[] = [];
+
+    seconds.forEach((second) => {
+      commands.push(
+        // Input
+        '-i',
+        file.name, //grab the file name from the file system
+        // Output options
+        '-ss',
+        `00:00:0${second}`, //change the current timestamp
+        '-frames:v',
+        '1', //grab one frame
+        '-filter:v',
+        'scale=510:-1', //rescale the screenshot. need filter flag
+        // Output
+        `output_0${second}.png` //output file
+      );
+    });
+
+    await this.ffmpeg.run(...commands);
+
+    const screenshots: string[] = [];
+
+    seconds.forEach((second) => {
+      const screenshotFile = this.ffmpeg.FS(
+        'readFile',
+        `output_0${second}.png`
+      );
+
+      const screenshotBlob = new Blob([screenshotFile.buffer], {
+        type: 'image/png',
+      });
+      const screenshotUrl = URL.createObjectURL(screenshotBlob);
+
+      screenshots.push(screenshotUrl);
+    });
+
+    return screenshots;
   }
 }
